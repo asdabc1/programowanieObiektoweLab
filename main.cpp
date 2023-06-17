@@ -5,9 +5,15 @@ using namespace std;
 
 klient* nowyKlient();
 
-int main()
-{
-
+int main() {
+    vector<klient> listaKlientow;
+    vector<przedmioty> listaPrzedmiotow;
+    fstream fileZamowienie;
+    fileZamowienie.open("zamowienia.txt");
+    fstream filePrzedmioty;
+    filePrzedmioty.open("przedmioty.txt");
+    std::fstream fileKlienci;
+    fileKlienci.open("klienci.txt");
     return 0;
 }
 

@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "klient.h"
 
 using namespace std;
@@ -50,4 +48,10 @@ void klient::modyfikuj() {
         cout << "wybrano nieodpowiednia opcje!" << endl;
         break;
     }
+}
+
+void klient::zapisz(fstream plik) {
+    plik << imie << " " << nazwisko << " " << adres << " " << piec << endl;
+    for (zamowienie x : listaZamowien)
+        plik << "%" << x.zwrocID() << endl;
 }

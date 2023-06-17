@@ -127,14 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\file_handling.cpp" />
     <ClCompile Include="..\klient.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\przedmioty.cpp" />
     <ClCompile Include="..\zamowienie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\file_handling.h" />
     <ClInclude Include="..\head.h" />
     <ClInclude Include="..\klient.h" />
     <ClInclude Include="..\przedmioty.h" />

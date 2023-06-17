@@ -3,10 +3,9 @@
 
 using namespace std;
 
-zamowienie::zamowienie(string date, float sum, sposobyPlatnosci payment, przedmioty* lista)
+zamowienie::zamowienie(string date, float sum, sposobyPlatnosci payment, vector<przedmioty> lista)
 {
     data = date;
-    wartoscCalkowita = sum;
     sp = payment;
     tab = lista;
     ID = time(NULL);
@@ -38,6 +37,24 @@ void zamowienie::edytuj() {
         }
         break;
     case 2:
-        for (przedmioty* x : tab)
+        int i = 0;
+        for (przedmioty x : tab) {
+            cout << "[" << i << "]" << " " << x.zwrocNazwe() << "(" << x.zwrocCene() << ")\t";
+            i++;
+        }
+        cout << endl << "wybierz element do usuniecia: ";
+        cin >> temp;
+        tab.erase(tab.begin() + temp);
+        break;
     }
+}
+
+int zamowienie::zwrocID() {
+    return ID;
+}
+
+void zamowienie::zapisz(fstream plik) {
+    plik << ID << " " << data << " " << wartoscCalkowita << " " << sp << endl;
+    for (przedmioty x : tab)
+        plik << "%" << x.zwrocNazwe() << " " << x.zwrocCene() << " " << x.zwrocIlosc() << " " << x.zwrocVAT() << endl;
 }
