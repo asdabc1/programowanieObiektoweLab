@@ -7,10 +7,13 @@ fstream zamowienie::plik;
 
 zamowienie::zamowienie(string date, sposobyPlatnosci payment, vector<przedmioty> list)
 {
+	float suma = 0;
 	data = date;
 	sp = payment;
 	ID = time(NULL);
 	tab = list;
+	for (przedmioty q : tab)
+		suma += q.zwrocCene() * q.zwrocIlosc();
 }
 
 zamowienie::zamowienie(int iden, string date, sposobyPlatnosci payment)

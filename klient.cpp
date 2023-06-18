@@ -75,9 +75,9 @@ int czytajID(string wyrazenie) {
 void klient::wczytaj(vector<klient>* lista) {
 	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\klienci.txt", ios::in);
 	string t, name, lname, adr, gen, log, passwd;
-	stringstream linia;
 	while (getline(plik, t)) {
 		if (t[0] != '%') {
+			stringstream linia;
 			linia << t;
 			linia >> name;
 			linia >> lname;

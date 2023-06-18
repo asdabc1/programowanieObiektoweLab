@@ -120,7 +120,7 @@ int main() {
 	}
 
 	while (aktualny != nullptr) {
-		int x, y;
+		int x, y, z;
 		string linia, el, lg, psd;
 		stringstream a;
 		vector<przedmioty> tempList;
@@ -167,6 +167,10 @@ int main() {
 					spos = blik;
 				listaZamowien.push_back(*(new zamowienie(lg, spos, tempList)));
 				aktualny->dodajZam((listaZamowien.end() - 1)->zwrocID());
+				system("cls");
+				break;
+			case 2:
+				system("cls");
 				break;
 			}
 			break;
@@ -175,8 +179,47 @@ int main() {
 			cin >> x;
 			switch (x) {
 			case 1:
-				
+				aktualny->wyswListeZamow();
+				cout << "(1)edycja zamowien (2)wyjscie ";
+				cin >> x;
+				if (x == 1) {
+					cout << "wpisz ID zamowienia do edycji: ";
+					cin >> y;
+					z = -1;
+					for (int i = 0; i < size(listaZamowien); i++) {
+						if (listaZamowien[i].zwrocID() == y) {
+							listaZamowien[i].edytuj();
+							break;
+						}
+					}
+					system("cls");
+					break;
+				}
+				else {
+					system("cls");
+					break;
+				}
+				break;
+			case 2:
+				aktualny->modyfikuj();
+				break;
 			}
+			break;
+		case 3:
+			system("cls");
+			cout << "podaj login: ";
+			cin >> lg;
+			cout << endl << "podaj haslo: ";
+			cin >> psd;
+			for (int i = 0; i < size(listaKlientow); i++) {
+				if (listaKlientow[i].logowanie(lg, psd)) {
+					aktualny = &listaKlientow[i];
+					break;
+				}
+			}
+			if (aktualny == nullptr)
+				cout << "logowanie nieudane" << endl;
+			break;
 		case 4:
 			klient::zapisz(listaKlientow);
 			przedmioty::zapisz(listaPrzedmiotow);
