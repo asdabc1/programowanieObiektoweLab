@@ -61,9 +61,9 @@ int main() {
 					cin >> lg;
 					cout << endl << "podaj haslo: ";
 					cin >> psd;
-					for (klient q : listaKlientow) {
-						if (q.logowanie(lg, psd)) {
-							aktualny = &q;
+					for (int i = 0; i < size(listaKlientow); i++) {
+						if (listaKlientow[i].logowanie(lg, psd)) {
+							aktualny = &listaKlientow[i];
 							break;
 						}
 					}
@@ -87,7 +87,7 @@ int main() {
 				else
 					spos = blik;
 				listaZamowien.push_back(*(new zamowienie(lg, spos, tempList)));
-				//aktualny->dodajZam(listaZamowien.end()->zwrocID());
+				aktualny->dodajZam((listaZamowien.end() - 1)->zwrocID());
 				break;
 			}
 		case 2:
@@ -96,9 +96,9 @@ int main() {
 			cin >> lg;
 			cout << endl << "podaj haslo: ";
 			cin >> psd;
-			for (klient q : listaKlientow) {
-				if (q.logowanie(lg, psd)) {
-					aktualny = &q;
+			for (int i = 0; i < size(listaKlientow); i++) {
+				if (listaKlientow[i].logowanie(lg, psd)) {
+					aktualny = &listaKlientow[i];
 					break;
 				}
 			}
@@ -166,9 +166,21 @@ int main() {
 				else
 					spos = blik;
 				listaZamowien.push_back(*(new zamowienie(lg, spos, tempList)));
-				//aktualny->dodajZam(listaZamowien.end()->zwrocID());
+				aktualny->dodajZam((listaZamowien.end() - 1)->zwrocID());
 				break;
 			}
+			break;
+		case 2:
+			cout << "(1)historia zamowien, (2)edycja konta";
+			cin >> x;
+			switch (x) {
+			case 1:
+				
+			}
+		case 4:
+			klient::zapisz(listaKlientow);
+			przedmioty::zapisz(listaPrzedmiotow);
+			zamowienie::zapisz(listaZamowien);
 			return 0;
 		}
 	}

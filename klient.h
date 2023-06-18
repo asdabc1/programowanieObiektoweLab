@@ -29,6 +29,7 @@ public:
 	static void wczytaj(std::vector<klient>*);
 	bool logowanie(std::string, std::string);
 	void dodajZam(int ID);
+	void wyswListeZamow();
 };
 
 #endif // KLIENT_H

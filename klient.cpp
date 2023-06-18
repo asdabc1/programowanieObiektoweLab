@@ -96,7 +96,7 @@ void klient::wczytaj(vector<klient>* lista) {
 			(*lista).push_back(a);
 		}
 		else {
-			(*lista).end()->listaZamowien.push_back(czytajID(t));
+			((*lista).end() - 1)->listaZamowien.push_back(czytajID(t));
 		}
 	}
 	plik.close();
@@ -108,4 +108,9 @@ bool klient::logowanie(string log, string passwd) {
 
 void klient::dodajZam(int ID) {
 	listaZamowien.push_back(ID);
+}
+
+void klient::wyswListeZamow() {
+	for (int q : listaZamowien)
+		cout << "zamowienie o ID: " << q << endl;
 }

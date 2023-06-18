@@ -113,7 +113,7 @@ void zamowienie::wczytaj(vector<zamowienie>* lista) {
 			(*lista).push_back(a);
 		}
 		else {
-			(*lista).end()->tab.push_back(czytajPrzedmiot(t));
+			((*lista).end() - 1)->tab.push_back(czytajPrzedmiot(t));
 		}
 	}
 	plik.close();
