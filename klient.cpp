@@ -4,11 +4,13 @@ using namespace std;
 
 fstream klient::plik;
 
-klient::klient(string name, string lname, string adr, plec gen) {
+klient::klient(string name, string lname, string adr, plec gen, string log, string has) {
 	imie = name;
 	nazwisko = lname;
 	adres = adr;
 	piec = gen;
+	login = log;
+	haslo = has;
 }
 
 void klient::modyfikuj() {
@@ -55,10 +57,11 @@ void klient::modyfikuj() {
 void klient::zapisz(vector<klient> lista) {
 	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\klienci.txt", ios::out);
 	for (klient x : lista) {
-		plik << x.imie << " " << x.nazwisko << " " << x.adres << " " << x.piec << endl;
+		plik << x.imie << " " << x.nazwisko << " " << x.adres << " " << x.piec << " " << x.login << " " << x.haslo << endl;
 		for (int y : x.listaZamowien)
 			plik << "%" << y << endl;
 	}
+	plik.close();
 }
 
 int czytajID(string wyrazenie) {
@@ -69,9 +72,9 @@ int czytajID(string wyrazenie) {
 	return ret;
 }
 
-void klient::wczytaj(vector<klient> lista) {
+void klient::wczytaj(vector<klient>* lista) {
 	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\klienci.txt", ios::in);
-	string t, name, lname, adr, gen;
+	string t, name, lname, adr, gen, log, passwd;
 	stringstream linia;
 	while (getline(plik, t)) {
 		if (t[0] != '%') {
@@ -80,18 +83,29 @@ void klient::wczytaj(vector<klient> lista) {
 			linia >> lname;
 			linia >> adr;
 			linia >> gen;
+			linia >> log;
+			linia >> passwd;
 			plec z;
-			if (gen == "mezczyzna")
+			if (gen == "1")
 				z = mezczyzna;
-			else if (gen == "kobieta")
+			else if (gen == "2")
 				z = kobieta;
 			else
 				z = inne;
-			klient a(name, lname, adr, z);
-			lista.push_back(a);
+			klient a(name, lname, adr, z, log, passwd);
+			(*lista).push_back(a);
 		}
 		else {
-			lista.end()->listaZamowien.push_back(czytajID(t));
+			(*lista).end()->listaZamowien.push_back(czytajID(t));
 		}
 	}
+	plik.close();
+}
+
+bool klient::logowanie(string log, string passwd) {
+	return (log == login && passwd == haslo);
+}
+
+void klient::dodajZam(int ID) {
+	listaZamowien.push_back(ID);
 }

@@ -19,12 +19,12 @@ private:
 	int ID;
 	static std::fstream plik;
 public:
-	zamowienie(std::string date, sposobyPlatnosci payment);
+	zamowienie(std::string date, sposobyPlatnosci payment, std::vector<przedmioty> list);
 	zamowienie(int ident, std::string date, sposobyPlatnosci payment);
 	void edytuj();
 	int zwrocID();
 	static void zapisz(std::vector<zamowienie> lista);
-	static void wczytaj(std::vector<zamowienie> lista);
+	static void wczytaj(std::vector<zamowienie>* lista);
 };
 
 #endif // ZAMOWIENIE_H

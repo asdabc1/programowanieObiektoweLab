@@ -23,10 +23,12 @@ private:
 	std::string haslo;
 	static std::fstream plik;
 public:
-	klient(std::string, std::string, std::string, plec);
+	klient(std::string, std::string, std::string, plec, std::string, std::string);
 	void modyfikuj();
 	static void zapisz(std::vector<klient>);
-	static void wczytaj(std::vector<klient>);
+	static void wczytaj(std::vector<klient>*);
+	bool logowanie(std::string, std::string);
+	void dodajZam(int ID);
 };
 
 #endif // KLIENT_H

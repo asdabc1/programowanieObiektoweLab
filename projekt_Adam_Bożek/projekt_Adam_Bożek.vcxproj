@@ -133,7 +133,6 @@
     <ClCompile Include="..\zamowienie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\head.h" />
     <ClInclude Include="..\klient.h" />
     <ClInclude Include="..\przedmioty.h" />
     <ClInclude Include="..\zamowienie.h" />
