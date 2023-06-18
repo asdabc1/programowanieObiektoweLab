@@ -3,12 +3,24 @@
 
 using namespace std;
 
-zamowienie::zamowienie(string date, float sum, sposobyPlatnosci payment, vector<przedmioty> lista)
+fstream zamowienie::plik;
+
+zamowienie::zamowienie(string date, sposobyPlatnosci payment)
 {
     data = date;
     sp = payment;
-    tab = lista;
     ID = time(NULL);
+}
+
+zamowienie::zamowienie(int iden, string date, sposobyPlatnosci payment)
+{
+    data = date;
+    sp = payment;
+    ID = iden;
+}
+
+bool operator==(zamowienie x, int y) {
+    return (x.zwrocID() == y);
 }
 
 void zamowienie::edytuj() {
@@ -53,8 +65,53 @@ int zamowienie::zwrocID() {
     return ID;
 }
 
-void zamowienie::zapisz(fstream plik) {
-    plik << ID << " " << data << " " << wartoscCalkowita << " " << sp << endl;
-    for (przedmioty x : tab)
-        plik << "%" << x.zwrocNazwe() << " " << x.zwrocCene() << " " << x.zwrocIlosc() << " " << x.zwrocVAT() << endl;
+void zamowienie::zapisz(vector<zamowienie> lista) {
+    plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\zamowienia.txt", ios::out);
+    for (zamowienie q : lista) {
+        plik << q.ID << " " << q.data << " " << q.sp << endl;
+        for (przedmioty x : q.tab)
+            plik << "%" << x.zwrocNazwe() << " " << x.zwrocCene() << " " << x.zwrocIlosc() << " " << x.zwrocVAT() << endl;
+    }
+}
+
+przedmioty czytajPrzedmiot(string wyrazenie) {
+    string op, nazwa, cena, ilosc, vat;
+    for (int i = 1; i < size(wyrazenie); i++)
+        op += wyrazenie[i];
+    stringstream linia;
+    linia << op;
+    linia >> nazwa;
+    linia >> cena;
+    linia >> ilosc;
+    linia >> vat;
+    przedmioty a(nazwa, stof(cena), stof(vat), stoi(ilosc));
+    return a;
+}
+
+void zamowienie::wczytaj(vector<zamowienie> lista) {
+    plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\zamowienia.txt", ios::in);
+    string t, ID, data, sposob;
+    stringstream linia;
+    while (getline(plik, t)) {
+        if (t[0] != '%') {
+            linia << t;
+            linia >> ID;
+            linia >> data;
+            linia >> sposob;
+            sposobyPlatnosci x;
+            if (sposob == "gotowka")
+                x = gotowka;
+            else if (sposob == "karta")
+                x = karta;
+            else if (sposob == "raty")
+                x = raty;
+            else
+                x = blik;
+            zamowienie a(stoi(ID), data, x);
+            lista.push_back(a);
+        }
+        else {
+            lista.end()->tab.push_back(czytajPrzedmiot(t));
+        }
+    }
 }
