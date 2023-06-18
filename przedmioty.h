@@ -20,6 +20,7 @@ public:
 	int zwrocIlosc();
 	std::string zwrocNazwe();
 	float zwrocCene();
+	void odejmij(int);
 };
 
 #endif // PRZEDMIOTY_H

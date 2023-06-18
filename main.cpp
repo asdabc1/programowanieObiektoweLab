@@ -6,7 +6,11 @@
 
 using namespace std;
 
-klient nowyKlient(klient**);
+klient nowyKlient();
+void zapisPlikowy(vector<klient> listaKlientow, vector<przedmioty> listaPrzedmiotow, vector<zamowienie> listaZamowien);
+void login(vector<klient>* listaKlientow, klient** aktualny);
+void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList);
+void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList);
 
 int main() {
 	vector<klient> listaKlientow;
@@ -21,115 +25,60 @@ int main() {
 
 	while (aktualny == nullptr) {
 		int x, y;
-		string linia, el, lg, psd;
-		stringstream a;
 		vector<przedmioty> tempList;
-		vector<int> indList;
 		cout << "1 - wyswietl dostepne produkty" << endl
 			<< "2 - zaloguj sie" << endl
 			<< "3 - zarejestruj sie" << endl
 			<< "4 - wyjscie z programu" << endl;
 		cin >> x;
+
 		switch (x) {
 		case 1:
+			obslugaZamowien(&listaPrzedmiotow, &tempList);
 			system("cls");
-			for (przedmioty q : listaPrzedmiotow)
-				cout << q.zwrocNazwe() << " (" << q.zwrocCene() << ") x " << q.zwrocIlosc() << endl;
-			cout << endl << endl << "(1)dokonaj zamowienia" << endl
-				<< "(2)anuluj" << endl;
+			cout << "(1)zaloguj sie lub (2)zarejestruj!" << endl;
 			cin >> y;
+			
 			switch (y) {
 			case 1:
-				cout << "podaj numer(y) artykulu(ow), jesli zamawiany jest wiecej niz jeden artykul, ich numery oddziel spacja: ";
-				cin.ignore();
-				getline(cin, linia);
-				a << linia;
-				while (getline(a, el, ' ')) {
-					indList.push_back(stoi(el));
-				}
-				sort(indList.begin(), indList.end(), greater<int>());
-				for (int q : indList) {
-					tempList.push_back(listaPrzedmiotow[q]);
-					listaPrzedmiotow.erase(listaPrzedmiotow.begin() + q);
-				}
+				login(&listaKlientow, &aktualny);
+				break;
+			case 2:
+				listaKlientow.push_back(nowyKlient());
 				system("cls");
-				cout << "(1)zaloguj sie lub (2)zarejestruj!" << endl;
-				cin >> y;
-				switch (y) {
-				case 1:
-					cout << "podaj login: ";
-					cin >> lg;
-					cout << endl << "podaj haslo: ";
-					cin >> psd;
-					for (int i = 0; i < size(listaKlientow); i++) {
-						if (listaKlientow[i].logowanie(lg, psd)) {
-							aktualny = &listaKlientow[i];
-							break;
-						}
-					}
-					break;
-				case 2:
-					listaKlientow.push_back(nowyKlient(&aktualny));
-					system("cls");
-					break;
-				}
-				cout << "dzisiejsza data: ";
-				cin >> lg;
-				cout << endl << "sposob platnosci: (1)gotowka, (2)karta, (3)raty, (4)blik: ";
-				cin >> x;
-				sposobyPlatnosci spos;
-				if (x == 1)
-					spos = gotowka;
-				else if (x == 2)
-					spos = karta;
-				else if (x == 3)
-					spos = raty;
-				else
-					spos = blik;
-				listaZamowien.push_back(*(new zamowienie(lg, spos, tempList)));
-				aktualny->dodajZam((listaZamowien.end() - 1)->zwrocID());
+				cout << "zaloguj sie przy uzyciu nowo zalozonego konta" << endl;
+				login(&listaKlientow, &aktualny);
+				system("cls");
 				break;
 			}
+
+			obslugaZamowienII(&listaZamowien, &aktualny, tempList);
+			break;
 		case 2:
-			system("cls");
-			cout << "podaj login: ";
-			cin >> lg;
-			cout << endl << "podaj haslo: ";
-			cin >> psd;
-			for (int i = 0; i < size(listaKlientow); i++) {
-				if (listaKlientow[i].logowanie(lg, psd)) {
-					aktualny = &listaKlientow[i];
-					break;
-				}
-			}
-			if (aktualny == nullptr)
-				cout << "logowanie nieudane" << endl;
+			login(&listaKlientow, &aktualny);
 			break;
 		case 3:
-			listaKlientow.push_back(nowyKlient(&aktualny));
+			listaKlientow.push_back(nowyKlient());
 			system("cls");
 			break;
 		case 4:
-			klient::zapisz(listaKlientow);
-			przedmioty::zapisz(listaPrzedmiotow);
-			zamowienie::zapisz(listaZamowien);
+			zapisPlikowy(listaKlientow, listaPrzedmiotow, listaZamowien);
 			return 0;
 		default:
 			break;
-		}
+
 	}
+}
 
 	while (aktualny != nullptr) {
 		int x, y, z;
-		string linia, el, lg, psd;
-		stringstream a;
 		vector<przedmioty> tempList;
-		vector<int> indList;
 		cout << "1 - wyswietl dostepne produkty" << endl
 			<< "2 - poglad konta" << endl
 			<< "3 - przeloguj sie" << endl
 			<< "4 - wyjscie z programu" << endl;
 		cin >> x;
+		
 		switch (x) {
 		case 1:
 			system("cls");
@@ -138,45 +87,22 @@ int main() {
 			cout << endl << endl << "(1)dokonaj zamowienia" << endl
 				<< "(2)anuluj" << endl;
 			cin >> y;
+			
 			switch (y) {
 			case 1:
-				cout << "podaj numer(y) artykulu(ow), jesli zamawiany jest wiecej niz jeden artykul, ich numery oddziel spacja: ";
-				cin.ignore();
-				getline(cin, linia);
-				a << linia;
-				while (getline(a, el, ' ')) {
-					indList.push_back(stoi(el));
-				}
-				sort(indList.begin(), indList.end(), greater<int>());
-				for (int q : indList) {
-					tempList.push_back(listaPrzedmiotow[q]);
-					listaPrzedmiotow.erase(listaPrzedmiotow.begin() + q);
-				}
-				cout << "dzisiejsza data: ";
-				cin >> lg;
-				cout << endl << "sposob platnosci: (1)gotowka, (2)karta, (3)raty, (4)blik: ";
-				cin >> x;
-				sposobyPlatnosci spos;
-				if (x == 1)
-					spos = gotowka;
-				else if (x == 2)
-					spos = karta;
-				else if (x == 3)
-					spos = raty;
-				else
-					spos = blik;
-				listaZamowien.push_back(*(new zamowienie(lg, spos, tempList)));
-				aktualny->dodajZam((listaZamowien.end() - 1)->zwrocID());
-				system("cls");
+				obslugaZamowien(&listaPrzedmiotow, &tempList);
+				obslugaZamowienII(&listaZamowien, &aktualny, tempList);
 				break;
 			case 2:
 				system("cls");
 				break;
 			}
+
 			break;
 		case 2:
 			cout << "(1)historia zamowien, (2)edycja konta";
 			cin >> x;
+			
 			switch (x) {
 			case 1:
 				aktualny->wyswListeZamow();
@@ -204,32 +130,19 @@ int main() {
 				aktualny->modyfikuj();
 				break;
 			}
+
 			break;
 		case 3:
-			system("cls");
-			cout << "podaj login: ";
-			cin >> lg;
-			cout << endl << "podaj haslo: ";
-			cin >> psd;
-			for (int i = 0; i < size(listaKlientow); i++) {
-				if (listaKlientow[i].logowanie(lg, psd)) {
-					aktualny = &listaKlientow[i];
-					break;
-				}
-			}
-			if (aktualny == nullptr)
-				cout << "logowanie nieudane" << endl;
+			login(&listaKlientow, &aktualny);
 			break;
 		case 4:
-			klient::zapisz(listaKlientow);
-			przedmioty::zapisz(listaPrzedmiotow);
-			zamowienie::zapisz(listaZamowien);
+			zapisPlikowy(listaKlientow, listaPrzedmiotow, listaZamowien);
 			return 0;
 		}
 	}
 }
 
-klient nowyKlient(klient** akt) {
+klient nowyKlient() {
 	string imie;
 	string nazwisko;
 	string adres;
@@ -256,6 +169,83 @@ klient nowyKlient(klient** akt) {
 	cout << endl << "podaj haslo: ";
 	cin >> haslo;
 	klient nowy(imie, nazwisko, adres, pl, login, haslo);
-	*akt = &nowy;
 	return nowy;
+}
+
+void zapisPlikowy(vector<klient> listaKlientow, vector<przedmioty> listaPrzedmiotow, vector<zamowienie> listaZamowien) {
+	klient::zapisz(listaKlientow);
+	przedmioty::zapisz(listaPrzedmiotow);
+	zamowienie::zapisz(listaZamowien);
+}
+
+void login(vector<klient>* listaKlientow, klient** aktualny) {
+	string lg, psd;
+	system("cls");
+	cout << "podaj login: ";
+	cin >> lg;
+	cout << endl << "podaj haslo: ";
+	cin >> psd;
+	for (int i = 0; i < size(*listaKlientow); i++) {
+		if ((*listaKlientow)[i].logowanie(lg, psd)) {
+			*aktualny = &(*listaKlientow)[i];
+			break;
+		}
+	}
+	if (aktualny == nullptr)
+		cout << "logowanie nieudane" << endl;
+}
+
+void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList) {
+	int x, y;
+	string linia, el;
+	stringstream a;
+	vector<int> indList;
+	system("cls");
+	for (przedmioty q : *listaPrzedmiotow)
+		cout << q.zwrocNazwe() << " (" << q.zwrocCene() << ") x " << q.zwrocIlosc() << endl;
+	cout << endl << endl << "(1)dokonaj zamowienia" << endl
+		<< "(2)anuluj" << endl;
+	cin >> y;
+	switch (y) {
+	case 1:
+		cout << "podaj numer(y) artykulu(ow), jesli zamawiany jest wiecej niz jeden artykul, ich numery oddziel spacja: ";
+		cin.ignore();
+		getline(cin, linia);
+		a << linia;
+		while (getline(a, el, ' ')) {
+			indList.push_back(stoi(el));
+		}
+		sort(indList.begin(), indList.end(), greater<int>());
+		for (int q : indList) {
+			cout << "podaj ilosc przedmiotu: " << (*listaPrzedmiotow)[q].zwrocNazwe() << ": ";
+			do {
+				cin >> x;
+			} while (x > (*listaPrzedmiotow)[q].zwrocIlosc());
+			(*tempList).push_back(*(new przedmioty((*listaPrzedmiotow)[q].zwrocNazwe(), (*listaPrzedmiotow)[q].zwrocCene(), (*listaPrzedmiotow)[q].zwrocVAT(), x)));
+			if (x == (*listaPrzedmiotow)[q].zwrocIlosc())
+				(*listaPrzedmiotow).erase((*listaPrzedmiotow).begin() + q);
+			else
+				(*listaPrzedmiotow)[q].odejmij(x);
+		}
+	}
+}
+
+void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList) {
+	string data;
+	int x;
+	cout << "dzisiejsza data: ";
+	cin >> data;
+	cout << endl << "sposob platnosci: (1)gotowka, (2)karta, (3)raty, (4)blik: ";
+	cin >> x;
+	sposobyPlatnosci spos;
+	if (x == 1)
+		spos = gotowka;
+	else if (x == 2)
+		spos = karta;
+	else if (x == 3)
+		spos = raty;
+	else
+		spos = blik;
+	(*listaZamowien).push_back(*(new zamowienie(data, spos, tempList)));
+	(*aktualny)->dodajZam(((*listaZamowien).end() - 1)->zwrocID());
 }

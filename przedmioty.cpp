@@ -50,3 +50,7 @@ void przedmioty::wczytaj(vector<przedmioty>* lista) {
 	}
 	plik.close();
 }
+
+void przedmioty::odejmij(int val) {
+	ilosc -= val;
+}
