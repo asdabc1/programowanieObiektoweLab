@@ -35,7 +35,7 @@ void zamowienie::edytuj() {
 	cin >> temp;
 	switch (temp) {
 	case 1:
-		cout << endl << "wybierz metode platnosci (1 - gotowka, 2 - karta, 3 - raty, 4 - blik): ";
+		cout << endl << "wybierz metode platnosci (1 - gotowka, 2 - karta, 3 - raty, 4 - blik): _\b";
 		cin >> temp;
 		switch (temp) {
 		case 1:
@@ -69,12 +69,18 @@ int zamowienie::zwrocID() {
 	return ID;
 }
 
+void zamowienie::dodajPrzedmiot(string linia) {
+	przedmioty x = czytajPrzedmiot(linia);
+	tab.push_back(x);
+}
+
 void zamowienie::zapisz(vector<zamowienie> lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\zamowienia.txt", ios::out);
+	plik.open("zamowienia.txt", ios::out);
 	for (zamowienie q : lista) {
+		int i = -1;
 		plik << q.ID << " " << q.data << " " << q.sp << endl;
 		for (przedmioty x : q.tab)
-			plik << "%" << x.zwrocNazwe() << " " << x.zwrocCene() << " " << x.zwrocIlosc() << " " << x.zwrocVAT() << endl;
+			plik << "%" << x.zwrocNazwe() << " " << x.zwrocCene() << " " << x.zwrocVAT() << " " << x.zwrocIlosc() << endl;
 	}
 	plik.close();
 }
@@ -87,19 +93,19 @@ przedmioty czytajPrzedmiot(string wyrazenie) {
 	linia << op;
 	linia >> nazwa;
 	linia >> cena;
-	linia >> ilosc;
 	linia >> vat;
+	linia >> ilosc;
 	przedmioty a(nazwa, stof(cena), stof(vat), stoi(ilosc));
 	return a;
 }
 
 void zamowienie::wczytaj(vector<zamowienie>* lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\zamowienia.txt", ios::in);
+	plik.open("zamowienia.txt", ios::in);
 	string t, ID, data, sposob;
 	while (getline(plik, t)) {
+		stringstream linia;
+		linia << t;
 		if (t[0] != '%') {
-			stringstream linia;
-			linia << t;
 			linia >> ID;
 			linia >> data;
 			linia >> sposob;
@@ -116,7 +122,8 @@ void zamowienie::wczytaj(vector<zamowienie>* lista) {
 			(*lista).push_back(a);
 		}
 		else {
-			((*lista).end() - 1)->tab.push_back(czytajPrzedmiot(t));
+			auto temp = (lista->end() - 1);
+			temp->dodajPrzedmiot(t);
 		}
 	}
 	plik.close();

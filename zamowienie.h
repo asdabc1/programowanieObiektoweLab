@@ -16,14 +16,14 @@ private:
 	float wartoscCalkowita;
 	sposobyPlatnosci sp;
 	std::vector<przedmioty> tab;
-	std::vector<int> ilosci;
 	int ID;
 	static std::fstream plik;
 public:
-	zamowienie(std::string date, sposobyPlatnosci payment, std::vector<przedmioty> list, std::vector<int> ilosci);
+	zamowienie(std::string date, sposobyPlatnosci payment, std::vector<przedmioty> list);
 	zamowienie(int ident, std::string date, sposobyPlatnosci payment);
 	void edytuj();
 	int zwrocID();
+	void dodajPrzedmiot(std::string linia);
 	static void zapisz(std::vector<zamowienie> lista);
 	static void wczytaj(std::vector<zamowienie>* lista);
 };

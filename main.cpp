@@ -9,8 +9,8 @@ using namespace std;
 klient nowyKlient();
 void zapisPlikowy(vector<klient> listaKlientow, vector<przedmioty> listaPrzedmiotow, vector<zamowienie> listaZamowien);
 void login(vector<klient>* listaKlientow, klient** aktualny);
-void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList, vector<int>* ilosci);
-void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList, vector<int> ilosci);
+void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList);
+void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList);
 
 int main() {
 	vector<klient> listaKlientow;
@@ -26,7 +26,6 @@ int main() {
 	while (aktualny == nullptr) {
 		int x, y;
 		vector<przedmioty> tempList;
-		vector<int> qu;
 		cout << "1 - wyswietl dostepne produkty" << endl
 			<< "2 - zaloguj sie" << endl
 			<< "3 - zarejestruj sie" << endl
@@ -35,7 +34,7 @@ int main() {
 
 		switch (x) {
 		case 1:
-			obslugaZamowien(&listaPrzedmiotow, &tempList, &qu);
+			obslugaZamowien(&listaPrzedmiotow, &tempList);
 			system("cls");
 			cout << "(1)zaloguj sie lub (2)zarejestruj!" << endl;
 			cin >> y;
@@ -53,7 +52,7 @@ int main() {
 				break;
 			}
 
-			obslugaZamowienII(&listaZamowien, &aktualny, tempList, qu);
+			obslugaZamowienII(&listaZamowien, &aktualny, tempList);
 			break;
 		case 2:
 			login(&listaKlientow, &aktualny);
@@ -92,8 +91,8 @@ int main() {
 			
 			switch (y) {
 			case 1:
-				obslugaZamowien(&listaPrzedmiotow, &tempList, &qu);
-				obslugaZamowienII(&listaZamowien, &aktualny, tempList, qu);
+				obslugaZamowien(&listaPrzedmiotow, &tempList);
+				obslugaZamowienII(&listaZamowien, &aktualny, tempList);
 				break;
 			case 2:
 				system("cls");
@@ -111,7 +110,7 @@ int main() {
 				cout << "(1)edycja zamowien (2)wyjscie ";
 				cin >> x;
 				if (x == 1) {
-					cout << "wpisz ID zamowienia do edycji: ";
+					cout << "wpisz ID zamowienia do edycji: __________\b\b\b\b\b\b\b\b\b\b";
 					cin >> y;
 					z = -1;
 					for (int i = 0; i < size(listaZamowien); i++) {
@@ -197,7 +196,7 @@ void login(vector<klient>* listaKlientow, klient** aktualny) {
 		cout << "logowanie nieudane" << endl;
 }
 
-void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList, vector<int>* qu) {
+void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* tempList) {
 	int x, y;
 	string linia, el;
 	stringstream a;
@@ -223,7 +222,6 @@ void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* t
 			do {
 				cin >> x;
 			} while (x > (*listaPrzedmiotow)[q].zwrocIlosc());
-			(*qu).push_back(x);
 			(*tempList).push_back(*(new przedmioty((*listaPrzedmiotow)[q].zwrocNazwe(), (*listaPrzedmiotow)[q].zwrocCene(), (*listaPrzedmiotow)[q].zwrocVAT(), x)));
 			if (x == (*listaPrzedmiotow)[q].zwrocIlosc())
 				(*listaPrzedmiotow).erase((*listaPrzedmiotow).begin() + q);
@@ -233,7 +231,7 @@ void obslugaZamowien(vector<przedmioty>* listaPrzedmiotow, vector<przedmioty>* t
 	}
 }
 
-void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList, vector<int> qu) {
+void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vector<przedmioty> tempList) {
 	string data;
 	int x;
 	cout << "dzisiejsza data: ";
@@ -249,6 +247,6 @@ void obslugaZamowienII(vector<zamowienie>* listaZamowien, klient** aktualny, vec
 		spos = raty;
 	else
 		spos = blik;
-	(*listaZamowien).push_back(*(new zamowienie(data, spos, tempList, qu)));
+	(*listaZamowien).push_back(*(new zamowienie(data, spos, tempList)));
 	(*aktualny)->dodajZam(((*listaZamowien).end() - 1)->zwrocID());
 }

@@ -13,7 +13,7 @@ przedmioty::przedmioty(string name, float price, float taxRate, int amount)
 }
 
 void przedmioty::zapisz(vector<przedmioty> lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\przedmioty.txt", ios::out);
+	plik.open("przedmioty.txt", ios::out);
 	for (przedmioty q : lista)
 		plik << q.nazwa << " " << q.cena << " " << q.stawkaVAT << " " << q.ilosc << endl;
 	plik.close();
@@ -36,7 +36,7 @@ string przedmioty::zwrocNazwe() {
 }
 
 void przedmioty::wczytaj(vector<przedmioty>* lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\przedmioty.txt", ios::in);
+	plik.open("przedmioty.txt", ios::in);
 	string t, name, price, taxR, quant;
 	while (getline(plik, t)) {
 		stringstream linia;

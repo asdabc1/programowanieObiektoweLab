@@ -55,7 +55,7 @@ void klient::modyfikuj() {
 }
 
 void klient::zapisz(vector<klient> lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\klienci.txt", ios::out);
+	plik.open("klienci.txt", ios::out);
 	for (klient x : lista) {
 		plik << x.imie << " " << x.nazwisko << " " << x.adres << " " << x.piec << " " << x.login << " " << x.haslo << endl;
 		for (int y : x.listaZamowien)
@@ -73,7 +73,7 @@ int czytajID(string wyrazenie) {
 }
 
 void klient::wczytaj(vector<klient>* lista) {
-	plik.open("C:\\Users\\Adam\\Desktop\\plikiprojektowe\\klienci.txt", ios::in);
+	plik.open("klienci.txt", ios::in);
 	string t, name, lname, adr, gen, log, passwd;
 	while (getline(plik, t)) {
 		if (t[0] != '%') {
